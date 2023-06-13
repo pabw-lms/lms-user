@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Register</title>
+</head>
+<body class="flex justify-center items-center h-screen bg-sky-950">
+        <div class="flex flex-col items-center p-6 bg-gray-100 rounded-md shadow-2xl">
+            <h1 class="font-bold text-xl m-4">Register</h1>
+    
+            <form>
+                <input type="text" name="name" placeholder="Enter your username" required
+                class="px-2 py-1 w-full rounded" id="name"><br><br>    
+            
+                <input type="email" name="email" placeholder="Enter your e-mail" required
+                class="px-2 py-1 w-full rounded" id="email"><br><br>
+    
+                <input type="password" name="password" placeholder="Enter your password"required
+                class="px-2 py-1 w-full rounded" id="password"><br><br>
+
+                <select id="role" class="px-2 py-1 w-full rounded" required>
+                    <option value="" class="text-gray-200" disabled selected hidden>-- Select your role --</option>
+                    <option value="student">Student</option>
+                    <option value="staff">Staff</option>
+                    <option value="teacher">Teacher</option>
+                </select><br><br>
+    
+                <a href="login.html" class="mx-2 underline text-gray-800">Already have an account?</a>
+                <button id="register" type="submit" class="bg-gray-800 rounded text-white px-4 py-2 mx-2">Register</button>
+                <!-- <input type="button" value="Register" id="register"> -->
+            </form>
+        </div>
+    <script>
+
+
+        function doRegister(){
+            // membuat objek XMLHttpRequest baru
+            const ajax = new XMLHttpRequest(); 
+
+            // mendefinisikan http method dan url
+            ajax.open('POST', 'http://127.0.0.1:8000/api/v1/auth/register'); 
+
+            ajax.setRequestHeader('Content-Type', 'application/json')
+            ajax.setRequestHeader('Accept', 'application/json')
+
+            const json = {
+                name : document.getElementById("name").value,
+                email : document.getElementById("email").value,
+                password : document.getElementById("password").value,
+                password_confirmation : document.getElementById("password").value,
+                role : document.getElementById("role").value,
+            }
+
+            const strJson = JSON.stringify(json);
+
+            // mengirim request
+            ajax.send(strJson);
+
+            alert('Registration success')
+        }
+
+        document.getElementById("register").onclick = doRegister;
+    </script>
+
+</body>
+</html>

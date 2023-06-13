@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Document</title>
+</head>
+<body>
+  <form>
+    <label for="email">email: </label>
+    <input type="email" name="email" id="email"><br>
+
+    <label for="password">Password: </label>
+    <input type="password" name="password" id="password"><br>
+
+    <input type="button" value="login" id="login">
+  </form>
+    
+    <script>
+
+        function doLogin() {
+          var email = document.getElementById('email').value;
+          var password = document.getElementById('password').value;
+      
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', 'http://127.0.0.1:8000/api/v1/auth/login');
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+              if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                var user = response.user;
+                // Store the token in localStorage or session storage for future use
+                localStorage.setItem('user', user);
+                // Redirect or perform any other necessary actions
+                window.location.replace("index.html");
+              } else {
+                var errorResponse = JSON.parse(xhr.responseText);
+                var errorMessage = errorResponse.message;
+                // Display error message to the user
+              }
+            }
+          };
+      
+          var data = JSON.stringify({ email: email, password: password });
+          xhr.send(data);
+        }
+
+        document.getElementById("login").onclick = doLogin;
+      </script>
+      
+</body>
+</html>
+

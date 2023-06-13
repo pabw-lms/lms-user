@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda</title>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-indigo-100">
+    <div class="p-4">
+        <div class="">
+            <form>
+                <input type="search" name="search" id="search"><br>
+        
+                <input type="button" value="Search" id="search-button">
+            </form>
+            <div x-data="{ results: [] }" x-init="doSearch()">
+                <template x-for="result in results">
+                    <div class="flex flex-col items-center p-2">
+                        <img src="cover.jpeg" alt="">
+                        <div class="w-full">
+                            <h1 x-text="result.title" class="font-bold"></h1>
+                        </div>
+                        <div class="w-full">
+                            <p x-text="result.author" class="text-small"></p>
+                        </div>
+                        <div class="w-full">
+                            <a href="result.id" class="underline">Lihat detail</a>
+                        </div>
+                    </div>
+                </template>
+                
+            </div>
+            <!-- <div class="flex flex-col items-center p-2">
+                <div class="w-full">
+                    <h1 x-text="book.title" class="font-bold" id="search-title"></h1>
+                </div>
+                <div class="w-full">
+                    <p x-text="book.author" class="text-small" id="search-author"></p>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <script>
+        function doSearch(){
+            // membuat objek XMLHttpRequest baru
+            const ajax = new XMLHttpRequest(); 
+
+            const searchValue = document.getElementById('search').value;
+
+            // mendefinisikan http method dan url
+            ajax.open('GET', `http://127.0.0.1:8000/api/v1/books/search/${searchValue}`); 
+
+            ajax.setRequestHeader('Content-Type', 'application/json')
+            ajax.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'))
+
+            ajax.addEventListener('load', function () {
+                // konversi json
+                results = JSON.parse(ajax.responseText);
+
+                // menampilkan data ke DOM
+                // document.getElementById('search-title').innerHTML = data[0].title;
+                // document.getElementById('search-author').innerHTML = data[0].author;
+                // document.getElementById('search-publisher').innerHTML = data[0].publisher;
+            })
+
+            // mengirim request
+            ajax.send();
+        }
+
+        document.getElementById('search-button').onclick = doSearch;
+    </script>
+</body>
+</html>
