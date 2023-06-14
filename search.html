@@ -13,10 +13,14 @@
         <div class="">
             <form>
                 <input type="search" name="search" id="search"><br>
+
+                <button id="search-button" class="bg-indigo-800 text-white rounded px-2 py-1">Search</button>
         
-                <input type="button" value="Search" id="search-button">
+                <!-- <input type="button" value="Search" id="search-button"> -->
             </form>
-            <div x-data="{ results: [] }" x-init="doSearch()">
+
+            <p id="input"></p>
+            <div x-data="{ results: [] }" x-on:click="doSearch()">
                 <template x-for="result in results">
                     <div class="flex flex-col items-center p-2">
                         <img src="cover.jpeg" alt="">
@@ -31,7 +35,6 @@
                         </div>
                     </div>
                 </template>
-                
             </div>
             <!-- <div class="flex flex-col items-center p-2">
                 <div class="w-full">
@@ -48,13 +51,13 @@
             // membuat objek XMLHttpRequest baru
             const ajax = new XMLHttpRequest(); 
 
-            const searchValue = document.getElementById('search').value;
+            const searchValue = document.getElementById('search').value;            
 
             // mendefinisikan http method dan url
             ajax.open('GET', `http://127.0.0.1:8000/api/v1/books/search/${searchValue}`); 
 
             ajax.setRequestHeader('Content-Type', 'application/json')
-            ajax.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'))
+            // ajax.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'))
 
             ajax.addEventListener('load', function () {
                 // konversi json
@@ -70,7 +73,11 @@
             ajax.send();
         }
 
+        
+
         document.getElementById('search-button').onclick = doSearch;
+
+        document.getElementById('input').innerHTML =  document.getElementById('search').value
     </script>
 </body>
 </html>
